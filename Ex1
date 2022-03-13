@@ -10,3 +10,35 @@ CREATE TABLE countries
   FOREIGN KEY (region_id) REFERENCES regions(region_id)
 );
 
+CREATE TABLE LOCATIONS (
+location_id INT PRIMARY KEY,
+street_address VARCHAR(50),
+postal_code VARCHAR(6),
+city VARCHAR(25),
+state_province VARCHAR(40),
+country_id INT,
+FOREIGN KEY (country_id) REFERENCES COUNTRIES(country_id)
+);
+
+CREATE TABLE DEPARTMENTS (
+department_id INT PRIMARY KEY,
+department_name VARCHAR(100),
+manager_id INT,
+location_id INT,
+FOREIGN KEY (location_id) REFERENCES LOCATIONS(location_id)
+);
+
+CREATE TABLE EMPLOYEES (
+employee_id INT PRIMARY KEY,
+first_name VARCHAR(30),
+last_name VARCHAR(30),
+email VARCHAR(30),
+phone_number VARCHAR(12),
+hire_date DATE,
+job_id INT,
+salary DECIMAL,
+commission_pct VARCHAR(100),
+manager_id INT,
+department_id INT,
+FOREIGN KEY (department_id) REFERENCES DEPARTMENTS(department_id)
+);
