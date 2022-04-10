@@ -49,3 +49,29 @@ job_title VARCHAR(30),
 min_salary DECIMAL,
 max_salary DECIMAL
 );
+
+CREATE TABLE job_history (
+start_date DATE
+);
+
+ALTER TABLE JOB_HISTORY
+ADD end_date DATE
+ADD job_id INT
+ADD department_id INT
+ADD employee_id INT;
+
+ALTER TABLE JOB_HISTORY 
+ADD CONSTRAINT PK_JOB_HISTORY PRIMARY KEY (employee_id, start_date);
+
+ALTER TABLE JOB_HISTORY 
+ADD FOREIGN KEY (job_id) REFERENCES JOB(job_id)
+ADD FOREIGN KEY (department_id) REFERENCES DEPARTMENTS(department_id);
+
+ALTER TABLE EMPLOYEES 
+ADD FOREIGN KEY (job_id) REFERENCES JOB(job_id);
+
+ALTER TABLE JOB_HISTORY  
+ADD FOREIGN KEY (employee_id) REFERENCES EMPLOYEES(employee_id);
+
+ALTER TABLE EMPLOYEES 
+ADD FOREIGN KEY (employee_id) REFERENCES JOB_HISTORY(employee_id);
