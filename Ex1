@@ -81,3 +81,6 @@ ADD FOREIGN KEY (manager_id) REFERENCES employees(employee_id);
 
 ALTER TABLE DEPARTMENTS 
 ADD FOREIGN KEY (manager_id) REFERENCES employees(employee_id);
+
+ALTER TABLE JOB 
+ADD CHECK (max_salary>=min_salary);
