@@ -90,3 +90,5 @@ reg_id INT
 )
 
 DROP TABLE region_hist;
+
+FLASHBACK TABLE region_hist TO BEFORE DROP;
