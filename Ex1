@@ -42,3 +42,10 @@ manager_id INT,
 department_id INT,
 FOREIGN KEY (department_id) REFERENCES DEPARTMENTS(department_id)
 );
+
+CREATE TABLE JOB (
+job_id INT PRIMARY KEY,
+job_title VARCHAR(30),
+min_salary DECIMAL,
+max_salary DECIMAL
+);
