@@ -78,3 +78,6 @@ ADD FOREIGN KEY (employee_id) REFERENCES JOB_HISTORY(employee_id);
 
 ALTER TABLE EMPLOYEES 
 ADD FOREIGN KEY (manager_id) REFERENCES employees(employee_id);
+
+ALTER TABLE DEPARTMENTS 
+ADD FOREIGN KEY (manager_id) REFERENCES employees(employee_id);
