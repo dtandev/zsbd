@@ -84,3 +84,9 @@ ADD FOREIGN KEY (manager_id) REFERENCES employees(employee_id);
 
 ALTER TABLE JOB 
 ADD CHECK (max_salary>=min_salary);
+
+CREATE TABLE region_hist (
+reg_id INT
+)
+
+DROP TABLE region_hist;
