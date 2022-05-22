@@ -31,3 +31,6 @@ ALTER TABLE job_history ADD(PRIMARY KEY (employee_id, start_date),     FOREIGN K
 ALTER TABLE job_history ADD(FOREIGN KEY (job_id) REFERENCES jobs(job_id) ON DELETE SET NULL);
 ALTER TABLE job_history ADD(FOREIGN KEY (employee_id) REFERENCES employees(employee_id) ON DELETE SET NULL);
 
+SELECT concat(concat(last_name, ' '), salary) AS wynagrodzenie FROM EMPLOYEES 
+WHERE (DEPARTMENT_ID IN (50, 70)) AND (SALARY BETWEEN 2000 AND 7000) 
+ORDER BY LAST_NAME 
