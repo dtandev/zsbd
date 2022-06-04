@@ -125,10 +125,10 @@ END;
 CREATE PROCEDURE add_jobs(v_job_id VARCHAR2, v_job_title VARCHAR2) IS
 BEGIN
      INSERT INTO jobs VALUES(v_job_id, v_job_title, null, null);
-     DBMS_OUTPUT.put_line('dodano job_id: '||v_job_id||', job_title: '||v_job_title);
+     DBMS_OUTPUT.put_line('Added job_id: '||v_job_id||', job_title: '||v_job_title);
 EXCEPTION
 WHEN OTHERS THEN
-DBMS_OUTPUT.put_line('Blad przy dodawaniu danych');
+DBMS_OUTPUT.put_line('Something wrong during the data adding process');
 END;
 
 
@@ -137,4 +137,64 @@ BEGIN
 END;
 
 #9b
+create or replace PROCEDURE update_jobs_title(v_job_id VARCHAR2, v_job_title VARCHAR2) IS
+no_jobs_updated EXCEPTION;
+BEGIN
+    UPDATE jobs
+        SET job_title = v_job_title
+        WHERE job_id = v_job_id;
+    IF SQL%NOTFOUND THEN RAISE no_jobs_updated;
+    ELSE 
+    DBMS_OUTPUT.put_line('Changed the job title for: '||v_job_title);
+    END IF;
+    EXCEPTION
+    WHEN no_jobs_updated THEN
+    DBMS_OUTPUT.put_line('There is no ID '||v_job_id|| ' in database');
+END;
+
+BEGIN
+	update_jobs_title('LAW', 'Lawyer2');
+END;
+
+#9c
+create or replace PROCEDURE delete_jobs(v_job_id VARCHAR2) IS
+no_jobs_deleted EXCEPTION;
+BEGIN
+    DELETE FROM jobs WHERE job_id = v_job_id;
+    IF SQL%NOTFOUND THEN RAISE no_jobs_deleted;
+    ELSE 
+    DBMS_OUTPUT.put_line('An object with '||v_job_id|| ' ID was deleted.');
+    END IF;
+    EXCEPTION
+    WHEN no_jobs_deleted THEN
+    DBMS_OUTPUT.put_line('There is no Job wit ID '||v_job_id|| 'in database.');
+END;
+
+BEGIN
+	delete_jobs('LAW');
+END;
+
+#9e
+create or replace PROCEDURE add_employees(v_employee_id NUMBER DEFAULT NULL, 
+    v_first_name VARCHAR2 DEFAULT NULL, v_last_name VARCHAR2 DEFAULT 'Kowalski', 
+    v_email VARCHAR2 DEFAULT 'kowalski@kowalski.pl', v_phone_number VARCHAR2 DEFAULT NULL,
+    v_hire_date DATE DEFAULT '2022-04-10', job_id VARCHAR2 DEFAULT 'Praca', v_salary NUMBER DEFAULT 2000,
+    v_commission_pct NUMBER DEFAULT NULL,  v_manager_id NUMBER DEFAULT NULL,
+    v_department_id NUMBER DEFAULT NULL) IS
+b_employee_id NUMBER;
+high_salary EXCEPTION;
+BEGIN
+    IF v_salary > 20000 THEN RAISE high_salary;
+    ELSE
+        SELECT max(employee_id) INTO v_max_employee_id FROM employees;
+        v_max_employee_id := v_max_employee_id + 1;
+        INSERT INTO employees VALUES(v_max_employee_id, v_first_name, v_last_name, v_email,
+            v_phone_number, v_hire_date, job_id, v_salary, v_commission_pct, v_manager_id,
+            v_department_id);
+        DBMS_OUTPUT.put_line('New employee was added with '||v_max_employee_id);
+    END IF;
+    EXCEPTION
+    WHEN high_salary THEN
+    DBMS_OUTPUT.put_line('New employee cannot earn more than 20000.');
+END;
 
