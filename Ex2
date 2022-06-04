@@ -1,3 +1,4 @@
+# Usuniecie tabel
 DROP TABLE TANAJEWSKI.REGIONS CASCADE CONSTRAINTS;
 DROP TABLE TANAJEWSKI.JOB CASCADE CONSTRAINTS;
 DROP TABLE TANAJEWSKI.JOB_HISTORY CASCADE CONSTRAINTS;
@@ -6,7 +7,7 @@ DROP TABLE TANAJEWSKI.COUNTRIES  CASCADE CONSTRAINTS;
 DROP TABLE TANAJEWSKI.DEPARTMENTS  CASCADE CONSTRAINTS;
 DROP TABLE TANAJEWSKI.LOCATIONS CASCADE CONSTRAINTS;
 
-
+# Skopiowanie tabel
 CREATE TABLE regions AS SELECT * FROM HR.regions;
 CREATE TABLE locations AS SELECT * FROM HR.locations;
 CREATE TABLE countries AS SELECT * FROM HR.countries;
@@ -16,7 +17,7 @@ CREATE TABLE jobs AS SELECT * FROM HR.jobs;
 CREATE TABLE job_grades AS SELECT * FROM HR.job_grades;
 CREATE TABLE job_history AS SELECT * FROM HR.job_history;
 
-
+# Przypisanie kluczy
 ALTER TABLE regions ADD(PRIMARY KEY (region_id));
 ALTER TABLE countries ADD(PRIMARY KEY (country_id), FOREIGN KEY (region_id) REFERENCES regions(region_id) ON DELETE SET NULL);
 ALTER TABLE locations ADD(PRIMARY KEY (location_id), FOREIGN KEY (country_id) REFERENCES countries(country_id) ON DELETE SET NULL);
@@ -31,18 +32,22 @@ ALTER TABLE job_history ADD(PRIMARY KEY (employee_id, start_date),     FOREIGN K
 ALTER TABLE job_history ADD(FOREIGN KEY (job_id) REFERENCES jobs(job_id) ON DELETE SET NULL);
 ALTER TABLE job_history ADD(FOREIGN KEY (employee_id) REFERENCES employees(employee_id) ON DELETE SET NULL);
 
+#1
 SELECT concat(concat(last_name, ' '), salary) AS wynagrodzenie FROM EMPLOYEES 
 WHERE (DEPARTMENT_ID IN (50, 70)) AND (SALARY BETWEEN 2000 AND 7000) 
 ORDER BY LAST_NAME 
 
+#2
 SELECT HIRE_DATE, LAST_NAME, &USER_COL FROM EMPLOYEES
 WHERE (MANAGER_ID IS NOT NULL) AND (HIRE_DATE BETWEEN TO_DATE ('2005/01/01', 'yyyy/mm/dd') AND TO_DATE ('2005/12/31', 'yyyy/mm/dd'))
 ORDER BY &USER_COL;
 
+#3
 SELECT row_number() OVER (ORDER BY 1 DESC, 2) AS "no", 
 CONCAT(CONCAT (first_name,' '),last_name) AS "Frst & last name", salary AS "Zarobki",  phone_number AS "Phone" FROM employees
 WHERE (SUBSTR(last_name,3,1) = 'e') AND (first_name LIKE '%&name%');
 
+#4
 SELECT CONCAT(CONCAT (first_name,' '),last_name) AS "First & last name",
 ROUND (MONTHS_BETWEEN(TO_DATE(SYSDATE), TO_DATE(hire_date) )) AS "Months worked", 
 CASE WHEN ROUND (MONTHS_BETWEEN(TO_DATE(SYSDATE), TO_DATE(hire_date) )) < 150 THEN '10%'
@@ -51,7 +56,26 @@ ELSE '30%' END AS "Bonus"
 FROM employees
 ORDER BY 2
 
+#5
+SELECT department_id AS "Department ID", count(*) AS "No of employees ", MIN(salary) AS "Min Salary", SUM(salary) AS "Salary SUM", ROUND(AVG(salary),0) AS "Salary AVG"
+FROM employees  
+GROUP BY department_id
+HAVING MIN(salary) > 5000
+ORDER BY department_id
 
+#6
+SELECT employees.last_name AS "Last  Name", employees.department_id AS "Department ID", departments.department_name AS "Department name", employees.job_id AS "Job ID"
+FROM employees, departments
+WHERE employees.department_id = departments.department_id AND 
+departments.location_id IN (SELECT locations.location_id FROM locations
+WHERE locations.city = 'Toronto')
 
+#7
+SELECT emp.first_name AS "First name", emp.last_name AS "Last Name", emp2.first_name AS "Coworker first name", emp2.last_name AS "Coworker last name"
+FROM employees emp
+JOIN employees emp2 ON emp.first_name = 'Jennifer' AND emp.department_id = emp2.department_id
 
-
+#8
+SELECT department_id AS "Department ID", department_name AS "Department name"
+FROM departments dep
+WHERE (SELECT COUNT(emp.department_id) FROM employees emp WHERE emp.department_id = dep.department_id) = 0
