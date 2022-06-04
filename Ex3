@@ -1,0 +1,40 @@
+#1
+DECLARE 
+    numer_max departments.department_id%TYPE;
+    v_department_name departments.department_name%TYPE;
+BEGIN
+    SELECT MAX(department_id) INTO numer_max FROM departments;
+    DBMS_OUTPUT.put_line('Max id dzialu: ' || numer_max);
+    v_department_name := 'EDUCATION';
+    numer_max := numer_max + 10;
+    INSERT INTO departments VALUES (numer_max, v_department_name, NULL, NULL);
+EXCEPTION
+WHEN  TOO_MANY_ROWS THEN
+DBMS_OUTPUT.put_line('Your request returns more than one row');
+END;
+
+#2
+DECLARE 
+    numer_max departments.department_id%TYPE;
+BEGIN
+    SELECT MAX(department_id) INTO numer_max FROM departments;
+    UPDATE departments SET location_id = 3000 where department_id = numer_max;
+EXCEPTION
+WHEN  TOO_MANY_ROWS THEN
+DBMS_OUTPUT.put_line('Your request returns more than one row');
+END;
+
+#3
+CREATE TABLE nowa (
+  pole VARCHAR(2)
+);
+
+BEGIN
+    FOR i IN 1..10
+    LOOP
+        IF i != 4 AND i != 6 THEN INSERT INTO nowa VALUES (i);    
+        END IF;
+    END LOOP;
+END;
+
+#4
