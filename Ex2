@@ -79,3 +79,20 @@ JOIN employees emp2 ON emp.first_name = 'Jennifer' AND emp.department_id = emp2.
 SELECT department_id AS "Department ID", department_name AS "Department name"
 FROM departments dep
 WHERE (SELECT COUNT(emp.department_id) FROM employees emp WHERE emp.department_id = dep.department_id) = 0
+
+#10
+SELECT employees.first_name AS "First name", employees.last_name AS "Last name", employees.job_id AS "Job ID", departments.department_name AS "Department name", employees.salary AS "Salary", job_grades.grade AS "Grade"
+FROM employees
+JOIN departments ON employees.department_id = departments.department_id
+JOIN job_grades ON employees.salary BETWEEN job_grades.min_salary AND job_grades.max_salary
+
+#11
+SELECT first_name AS "First name", last_name AS "Last Name", salary AS "Salary"
+FROM employees 
+WHERE salary > (SELECT AVG(salary) FROM employees)
+ORDER BY salary DESC;
+
+#12
+SELECT employee_id AS "Employee ID", first_name AS "First name", last_name AS "Last name"  
+FROM employees  
+WHERE department_id IN (SELECT department_id FROM employees WHERE last_name LIKE '%u%' );
