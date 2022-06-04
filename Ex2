@@ -38,3 +38,20 @@ ORDER BY LAST_NAME
 SELECT HIRE_DATE, LAST_NAME, &USER_COL FROM EMPLOYEES
 WHERE (MANAGER_ID IS NOT NULL) AND (HIRE_DATE BETWEEN TO_DATE ('2005/01/01', 'yyyy/mm/dd') AND TO_DATE ('2005/12/31', 'yyyy/mm/dd'))
 ORDER BY &USER_COL;
+
+SELECT row_number() OVER (ORDER BY 1 DESC, 2) AS "no", 
+CONCAT(CONCAT (first_name,' '),last_name) AS "Frst & last name", salary AS "Zarobki",  phone_number AS "Phone" FROM employees
+WHERE (SUBSTR(last_name,3,1) = 'e') AND (first_name LIKE '%&name%');
+
+SELECT CONCAT(CONCAT (first_name,' '),last_name) AS "First & last name",
+ROUND (MONTHS_BETWEEN(TO_DATE(SYSDATE), TO_DATE(hire_date) )) AS "Months worked", 
+CASE WHEN ROUND (MONTHS_BETWEEN(TO_DATE(SYSDATE), TO_DATE(hire_date) )) < 150 THEN '10%'
+WHEN ROUND (MONTHS_BETWEEN(TO_DATE(SYSDATE), TO_DATE(hire_date) )) BETWEEN 150 AND 199 THEN '20%'
+ELSE '30%' END AS "Bonus" 
+FROM employees
+ORDER BY 2
+
+
+
+
+
