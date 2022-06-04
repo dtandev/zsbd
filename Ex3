@@ -60,12 +60,81 @@ END;
 
 #6
 DECLARE
-	TYPE dep_ids IS TABLE OF departments.department_id%TYPE INDEX BY PLS_INTEGER;
+	TYPE dep_ids IS TABLE OF departments%ROWTYPE INDEX BY PLS_INTEGER;
 	dep dep_ids;
 BEGIN   
-    SELECT department_id BULK COLLECT INTO dep FROM departments;
+    SELECT * BULK COLLECT INTO dep FROM departments;
     FOR i IN 1..10
     LOOP
-        DBMS_OUTPUT.put_line(dzial(i).department_id || ' ' || dzial(i).department_name || ' '  || dzial(i).manager_id || ' ' || dzial(i).location_id);
+        DBMS_OUTPUT.put_line(dep(i).department_id || ' ' || dep(i).department_name || ' ' || dep(i).manager_id || ' ' || dep(i).location_id);
     END LOOP;
 END;
+
+#7
+DECLARE
+	CURSOR wynagrodzenie IS
+	SELECT last_name, salary FROM EMPLOYEES 
+	WHERE department_id = 50;
+    lname employees.last_name%TYPE;
+    salary employees.salary%TYPE;
+BEGIN
+    OPEN wynagrodzenie;
+    LOOP
+        FETCH wynagrodzenie INTO lname, salary;
+        EXIT WHEN wynagrodzenie%NOTFOUND;
+        IF salary > 3100 THEN DBMS_OUTPUT.put_line(lname || ' nie dawać podwyżki');
+        ELSE DBMS_OUTPUT.put_line(lname || ' dać podwyżkę');
+        END IF;
+    END LOOP;
+    CLOSE wynagrodzenie;
+END;
+
+#8a
+DECLARE
+	CURSOR wyplaty(salary_min NUMBER, salary_max NUMBER, part_of_name CHAR) IS
+	SELECT first_name, last_name, salary FROM EMPLOYEES 
+	WHERE (salary BETWEEN salary_min AND salary_max) AND (UPPER(first_name) LIKE UPPER('%'||part_of_name||'%'));
+    row_with_results wyplaty%ROWTYPE;
+BEGIN
+    OPEN wyplaty(1000, 5000, 'a');
+    LOOP
+        FETCH wyplaty INTO row_with_results;
+        EXIT WHEN wyplaty%NOTFOUND;
+        DBMS_OUTPUT.put_line(row_with_results.first_name||' '||row_with_results.last_name||' '||row_with_results.salary);
+    END LOOP;
+    CLOSE wyplaty;
+END;
+
+#8b
+DECLARE
+	CURSOR wyplaty(salary_min NUMBER, salary_max NUMBER, part_of_name CHAR) IS
+	SELECT first_name, last_name, salary FROM EMPLOYEES 
+	WHERE (salary BETWEEN salary_min AND salary_max) AND (UPPER(first_name) LIKE UPPER('%'||part_of_name||'%'));
+    row_with_results wyplaty%ROWTYPE;
+BEGIN
+    OPEN wyplaty(5000, 20000, 'u');
+    LOOP
+        FETCH wyplaty INTO row_with_results;
+        EXIT WHEN wyplaty%NOTFOUND;
+        DBMS_OUTPUT.put_line(row_with_results.first_name||' '||row_with_results.last_name||' '||row_with_results.salary);
+    END LOOP;
+    CLOSE wyplaty;
+END;
+
+#9a
+CREATE PROCEDURE add_jobs(v_job_id VARCHAR2, v_job_title VARCHAR2) IS
+BEGIN
+     INSERT INTO jobs VALUES(v_job_id, v_job_title, null, null);
+     DBMS_OUTPUT.put_line('dodano job_id: '||v_job_id||', job_title: '||v_job_title);
+EXCEPTION
+WHEN OTHERS THEN
+DBMS_OUTPUT.put_line('Blad przy dodawaniu danych');
+END;
+
+
+BEGIN
+     add_jobs('LAW', 'Lawyer');
+END;
+
+#9b
+
