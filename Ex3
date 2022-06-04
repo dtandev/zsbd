@@ -38,3 +38,34 @@ BEGIN
 END;
 
 #4
+DECLARE
+	country_names countries%ROWTYPE;
+BEGIN
+	SELECT * INTO country_names FROM countries WHERE country_id = 'CA';
+	DBMS_OUTPUT.put_line('Country name: ' || country_names.country_name);
+	DBMS_OUTPUT.put_line('Region ID: ' || country_names.region_id);
+END;
+
+#5
+DECLARE
+	TYPE dep_ids IS TABLE OF departments.department_id%TYPE INDEX BY PLS_INTEGER;
+	dep dep_ids;
+BEGIN   
+    SELECT department_id BULK COLLECT INTO dep FROM departments;
+    FOR i IN 1..10
+    LOOP
+        DBMS_OUTPUT.put_line(dep(i));
+    END LOOP;
+END;
+
+#6
+DECLARE
+	TYPE dep_ids IS TABLE OF departments.department_id%TYPE INDEX BY PLS_INTEGER;
+	dep dep_ids;
+BEGIN   
+    SELECT department_id BULK COLLECT INTO dep FROM departments;
+    FOR i IN 1..10
+    LOOP
+        DBMS_OUTPUT.put_line(dzial(i).department_id || ' ' || dzial(i).department_name || ' '  || dzial(i).manager_id || ' ' || dzial(i).location_id);
+    END LOOP;
+END;
