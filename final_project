@@ -51,7 +51,7 @@ CREATE TABLE rejestr_budynkow (
 );
 
 CREATE TABLE rejestr_wlascicieli (
-  PESEL int NOT NULL,
+  PESEL varchar(13) NOT NULL,
   imie varchar(30) NOT NULL,
   nazwisko varchar(30) NOT NULL,
   adres varchar(80) NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE rejestr_wlascicieli (
 
 CREATE TABLE rejestr_wlasnosci (
   numer_KW varchar(16) NOT NULL,
-  PESEL int NOT NULL,
+  PESEL varchar(13) NOT NULL,
   FOREIGN KEY (PESEL) REFERENCES rejestr_wlascicieli(PESEL),
   FOREIGN KEY (numer_KW) REFERENCES rejestr_KW(numer_KW)
 )
@@ -135,3 +135,37 @@ INSERT INTO rejestr_gruntow  (kod_dzialki, powierzchnia_dzialki, numer_KW, numer
 ('030711_1.0011.29/1', 0.7423, 'KW/14ab/22/03', 'AC-GD-52-256', '030711_1.0011'),
 ('030711_1.0011.222', 1.0092, 'KW/14ab/18/03', 'AC-CD-52-156', '030711_1.0011'),
 ('030711_1.0011.163', 0.1102, 'KW/14ab/20/07', 'AC-CD-52-156', '030711_1.0011');
+
+INSERT INTO ewidencja_podatkowa  (kod_gminy, podatek_od_gruntu, podatek_od_budynku, wskaznik_biologiczny) VALUES
+('041201_2', 0.56, 1.36, 0.5),
+('030711_1', 0.96, 1.95, 0.4);
+
+INSERT INTO rejestr_budynkow (kod_budynku, kod_dzialki, powierzchnia_budynku, przeznaczenie_budynku) VALUES
+('041201_2.0001.26/2.1', '041201_2.0001.26/2', 0.0120, 'B'),
+('041201_2.0001.26/1.1', '041201_2.0001.26/1', 0.0110, 'B'),
+('041201_2.0001.26/1.2', '041201_2.0001.26/1', 0.0210, 'H'),
+('041201_2.0001.128.1', '041201_2.0001.128', 0.0240, 'G'),
+('041201_2.0001.128.2', '041201_2.0001.128', 0.0170, 'B'),
+('041201_2.0001.128.3', '041201_2.0001.128', 0.0140, 'U'),
+('041201_2.0001.128.4', '041201_2.0001.128', 0.0144, 'G');
+
+
+INSERT INTO rejestr_wlascicieli (PESEL, imie, nazwisko, adres) VALUES
+('87062300576','Damian','Krzychowski','Bieszkowice, ul. Białostocka 1'),
+('64070321557','Emil','Pawlak','Wałcz,  ul. Grabowa 2'),
+('83112987903','Józef','Bramowicz','Mirosławiec, ul. Szkolna 2'),
+('76101621907','Krystian','Nowak','Gdańsk ul. Jesionowa 1'),
+('78111121207','Janina','Nowak','Gdańsk ul. Jesionowa 1');
+
+
+INSERT INTO rejestr_wlasnosci (numer_KW, PESEL) VALUES
+('KW/15as/21/12', '87062300576'),
+('KW/15ab/22/03', '87062300576'),
+('KW/12ab/18/03', '64070321557'),
+('KW/12ab/20/07', '64070321557'),
+('KW/14as/21/12', '83112987903'),
+('KW/14ab/22/03', '76101621907'),
+('KW/14ab/18/03', '76101621907'),
+('KW/14ab/22/03', '78111121207'),
+('KW/14ab/18/03', '78111121207'),
+('KW/14ab/20/07', '76101621907');
