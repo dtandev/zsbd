@@ -164,42 +164,18 @@ INSERT INTO rejestr_wlasnosci (numer_KW, PESEL) VALUES ('KW/14ab/20/07', '761016
 
 --procedury
 --dodaj wlasciciela
-DROP PROCEDURE dodaj_wlasciciela; 
-
-CREATE PROCEDURE dodaj_wlasciciela(
-	IN PESEL VARCHAR(13), 
-	IN imie VARCHAR(30), 
-	IN nazwisko VARCHAR(30), 
-	IN adres VARCHAR(80)
-)
+create or replace PROCEDURE dodaj_wlasciciela(v_PESEL VARCHAR2, v_imie VARCHAR2, v_nazwisko VARCHAR2, v_adres VARCHAR2) IS
 BEGIN
-	-- exit if the duplicate key occurs
-	DECLARE EXIT HANDLER FOR 1062
-	BEGIN
-		SELECT CONCAT('Istnieje już osoba o takim numerze PESEL');
-	END;
-	-- insert a new row into the table
-    INSERT INTO rejestr_wlascicieli  VALUES(PESEL, imie, nazwisko, adres);
-    SELECT CONCAT('Dodano: ', imie, ' ', nazwisko, ' do bazy');
+     INSERT INTO REJESTR_WLASCICIELI VALUES (v_PESEL, v_imie, v_nazwisko, v_adres);
+     DBMS_OUTPUT.put_line('Dodano uzytkownika '||v_imie||' '||v_nazwisko);
+EXCEPTION
+WHEN OTHERS THEN
+DBMS_OUTPUT.put_line('Something wrong during the data adding process');
 END;
 
-CALL dodaj_wlasciciela('99020424252', 'Alicja', 'Kiedrowska', 'Gaj 5, 24-254 Gaj');
-
---usun wlasciciela
-
-DROP PROCEDURE usun_wlasciciela; 
-
-CREATE PROCEDURE usun_wlasciciela(
-	IN v_PESEL VARCHAR(13)
-)
 BEGIN
-	DELETE FROM rejestr_wlascicieli WHERE PESEL = v_PESEL;
-	SELECT CONCAT('Usunieto wlasciciela o numerze PESEL: ', v_PESEL);
+	dodaj_wlasciciela('98010112345', 'Alicja', 'Olecka', 'Raj, 15-244 Raj');
 END;
-
-CALL usun_wlasciciela('99020424252')
-
---zmodyfikuj dzialke
 
 
 
