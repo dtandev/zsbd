@@ -86,86 +86,122 @@ ADD(przeznaczenie_budynku VARCHAR(3) NOT NULL);
 ALTER TABLE rejestr_wlasnosci 
 ADD(PRIMARY KEY (numer_KW, PESEL));
 
-INSERT INTO wojewodztwa (kod_wojewodztwa, nazwa_wojewodztwa) VALUES
-('01', 'podlaskie'),
-('02', 'warminsko-mazurskie'),
-('03', 'mazowieckie');
+INSERT INTO wojewodztwa (kod_wojewodztwa, nazwa_wojewodztwa) VALUES ('01', 'podlaskie');
+INSERT INTO wojewodztwa (kod_wojewodztwa, nazwa_wojewodztwa) VALUES ('02', 'warminsko-mazurskie');
+INSERT INTO wojewodztwa (kod_wojewodztwa, nazwa_wojewodztwa) VALUES ('03', 'mazowieckie');
 
-INSERT INTO powiaty (kod_powiatu, kod_wojewodztwa, nazwa_powiatu) VALUES
-('0104', '01', 'kolnenski'),
-('0202', '02', 'm.Olsztyn'),
-('0307', '03', 'ostrolecki'),
-('0109', '01', 'monski'),
-('0203', '02', 'elcki'),
-('0301', '03', 'makowski');
+INSERT INTO powiaty (kod_powiatu, kod_wojewodztwa, nazwa_powiatu) VALUES ('0104', '01', 'kolnenski');
+INSERT INTO powiaty (kod_powiatu, kod_wojewodztwa, nazwa_powiatu) VALUES ('0202', '02', 'm.Olsztyn');
+INSERT INTO powiaty (kod_powiatu, kod_wojewodztwa, nazwa_powiatu) VALUES ('0307', '03', 'ostrolecki');
+INSERT INTO powiaty (kod_powiatu, kod_wojewodztwa, nazwa_powiatu) VALUES ('0109', '01', 'monski');
+INSERT INTO powiaty (kod_powiatu, kod_wojewodztwa, nazwa_powiatu) VALUES ('0203', '02', 'elcki');
+INSERT INTO powiaty (kod_powiatu, kod_wojewodztwa, nazwa_powiatu) VALUES ('0301', '03', 'makowski');
 
-INSERT INTO gminy (kod_gminy, kod_powiatu, nazwa_gminy) VALUES
-('041201_2', '0104', 'Turosl'),
-('020201_1', '0202', 'm.Olsztyn'),
-('010405_1', '0104', 'Kolno'),
-('010407_2', '0104', 'Maly Plock'),
-('030711_1', '0307', 'Myszyniec'),
-('030722_1', '0307', 'Lyse');
+INSERT INTO gminy (kod_gminy, kod_powiatu, nazwa_gminy) VALUES ('041201_2', '0104', 'Turosl');
+INSERT INTO gminy (kod_gminy, kod_powiatu, nazwa_gminy) VALUES ('020201_1', '0202', 'm.Olsztyn');
+INSERT INTO gminy (kod_gminy, kod_powiatu, nazwa_gminy) VALUES ('010405_1', '0104', 'Kolno');
+INSERT INTO gminy (kod_gminy, kod_powiatu, nazwa_gminy) VALUES ('010407_2', '0104', 'Maly Plock');
+INSERT INTO gminy (kod_gminy, kod_powiatu, nazwa_gminy) VALUES ('030711_1', '0307', 'Myszyniec');
+INSERT INTO gminy (kod_gminy, kod_powiatu, nazwa_gminy) VALUES ('030722_1', '0307', 'Lyse');
 
-INSERT INTO obreby_ewidencyjne  (kod_obrebu_ewidencyjnego, kod_gminy) VALUES
-('041201_2.0001', '041201_2'),
-('041201_2.0002', '041201_2'),
-('041201_2.0003', '041201_2'),
-('030711_1.0011', '030711_1'),
-('030711_1.0012', '030711_1'),
-('030711_1.0013', '030711_1');
+INSERT INTO obreby_ewidencyjne  (kod_obrebu_ewidencyjnego, kod_gminy) VALUES ('041201_2.0001', '041201_2');
+INSERT INTO obreby_ewidencyjne  (kod_obrebu_ewidencyjnego, kod_gminy) VALUES ('041201_2.0002', '041201_2');
+INSERT INTO obreby_ewidencyjne  (kod_obrebu_ewidencyjnego, kod_gminy) VALUES ('041201_2.0003', '041201_2');
+INSERT INTO obreby_ewidencyjne  (kod_obrebu_ewidencyjnego, kod_gminy) VALUES ('030711_1.0011', '030711_1');
+INSERT INTO obreby_ewidencyjne  (kod_obrebu_ewidencyjnego, kod_gminy) VALUES ('030711_1.0012', '030711_1');
+INSERT INTO obreby_ewidencyjne  (kod_obrebu_ewidencyjnego, kod_gminy) VALUES ('030711_1.0013', '030711_1');
 
 
-INSERT INTO rejestr_KW (numer_KW, data_wpisu) VALUES
-('KW/15as/21/12', '2021-12-11'),
-('KW/15ab/22/03', '2022-03-11'),
-('KW/12ab/18/03', '2018-03-11'),
-('KW/12ab/20/07', '2020-07-11'),
-('KW/14as/21/12', '2021-12-11'),
-('KW/14ab/22/03', '2022-03-11'),
-('KW/14ab/18/03', '2018-03-11'),
-('KW/14ab/20/07', '2020-07-11');
+INSERT INTO rejestr_KW (numer_KW, data_wpisu) VALUES ('KW/15as/21/12', TO_DATE('2021-12-11','YYYY-MM-DD'));
+INSERT INTO rejestr_KW (numer_KW, data_wpisu) VALUES ('KW/15ab/22/03', TO_DATE('2022-03-11','YYYY-MM-DD'));
+INSERT INTO rejestr_KW (numer_KW, data_wpisu) VALUES ('KW/12ab/18/03', TO_DATE('2018-03-11','YYYY-MM-DD'));
+INSERT INTO rejestr_KW (numer_KW, data_wpisu) VALUES ('KW/12ab/20/07', TO_DATE('2020-07-11','YYYY-MM-DD'));
+INSERT INTO rejestr_KW (numer_KW, data_wpisu) VALUES ('KW/14as/21/12', TO_DATE('2021-12-11','YYYY-MM-DD'));
+INSERT INTO rejestr_KW (numer_KW, data_wpisu) VALUES ('KW/14ab/22/03', TO_DATE('2022-03-11','YYYY-MM-DD'));
+INSERT INTO rejestr_KW (numer_KW, data_wpisu) VALUES ('KW/14ab/18/03', TO_DATE('2018-03-11','YYYY-MM-DD'));
+INSERT INTO rejestr_KW (numer_KW, data_wpisu) VALUES ('KW/14ab/20/07', TO_DATE('2020-07-11','YYYY-MM-DD'));
 
-INSERT INTO rejestr_gruntow  (kod_dzialki, powierzchnia_dzialki, numer_KW, numer_arkusza_mapy, kod_obrebu_ewidencyjnego) VALUES
-('041201_2.0001.26/2', 0.2222, 'KW/15as/21/12', 'AC-GD-52-256', '041201_2.0001'),
-('041201_2.0001.26/1', 0.3822, 'KW/15ab/22/03', 'AC-GD-52-256', '041201_2.0001'),
-('041201_2.0001.25', 1.3252, 'KW/12ab/18/03', 'AC-GD-52-156', '041201_2.0001'),
-('041201_2.0001.128', 0.1502, 'KW/12ab/20/07', 'AC-GD-52-156', '041201_2.0001'),
-('030711_1.0011.29/2', 0.2112, 'KW/14as/21/12', 'AC-GD-52-256', '030711_1.0011'),
-('030711_1.0011.29/1', 0.7423, 'KW/14ab/22/03', 'AC-GD-52-256', '030711_1.0011'),
-('030711_1.0011.222', 1.0092, 'KW/14ab/18/03', 'AC-CD-52-156', '030711_1.0011'),
-('030711_1.0011.163', 0.1102, 'KW/14ab/20/07', 'AC-CD-52-156', '030711_1.0011');
-
-INSERT INTO ewidencja_podatkowa  (kod_gminy, podatek_od_gruntu, podatek_od_budynku, wskaznik_biologiczny) VALUES
-('041201_2', 0.56, 1.36, 0.5),
-('030711_1', 0.96, 1.95, 0.4);
-
-INSERT INTO rejestr_budynkow (kod_budynku, kod_dzialki, powierzchnia_budynku, przeznaczenie_budynku) VALUES
-('041201_2.0001.26/2.1', '041201_2.0001.26/2', 0.0120, 'B'),
-('041201_2.0001.26/1.1', '041201_2.0001.26/1', 0.0110, 'B'),
-('041201_2.0001.26/1.2', '041201_2.0001.26/1', 0.0210, 'H'),
-('041201_2.0001.128.1', '041201_2.0001.128', 0.0240, 'G'),
-('041201_2.0001.128.2', '041201_2.0001.128', 0.0170, 'B'),
-('041201_2.0001.128.3', '041201_2.0001.128', 0.0140, 'U'),
-('041201_2.0001.128.4', '041201_2.0001.128', 0.0144, 'G');
+INSERT INTO rejestr_gruntow  (kod_dzialki, powierzchnia_dzialki, numer_KW, numer_arkusza_mapy, kod_obrebu_ewidencyjnego) VALUES ('041201_2.0001.26/2', 0.2222, 'KW/15as/21/12', 'AC-GD-52-256', '041201_2.0001');
+INSERT INTO rejestr_gruntow  (kod_dzialki, powierzchnia_dzialki, numer_KW, numer_arkusza_mapy, kod_obrebu_ewidencyjnego) VALUES ('041201_2.0001.26/1', 0.3822, 'KW/15ab/22/03', 'AC-GD-52-256', '041201_2.0001');
+INSERT INTO rejestr_gruntow  (kod_dzialki, powierzchnia_dzialki, numer_KW, numer_arkusza_mapy, kod_obrebu_ewidencyjnego) VALUES ('041201_2.0001.25', 1.3252, 'KW/12ab/18/03', 'AC-GD-52-156', '041201_2.0001');
+INSERT INTO rejestr_gruntow  (kod_dzialki, powierzchnia_dzialki, numer_KW, numer_arkusza_mapy, kod_obrebu_ewidencyjnego) VALUES ('041201_2.0001.128', 0.1502, 'KW/12ab/20/07', 'AC-GD-52-156', '041201_2.0001');
+INSERT INTO rejestr_gruntow  (kod_dzialki, powierzchnia_dzialki, numer_KW, numer_arkusza_mapy, kod_obrebu_ewidencyjnego) VALUES('030711_1.0011.29/2', 0.2112, 'KW/14as/21/12', 'AC-GD-52-256', '030711_1.0011');
+INSERT INTO rejestr_gruntow  (kod_dzialki, powierzchnia_dzialki, numer_KW, numer_arkusza_mapy, kod_obrebu_ewidencyjnego) VALUES('030711_1.0011.29/1', 0.7423, 'KW/14ab/22/03', 'AC-GD-52-256', '030711_1.0011');
+INSERT INTO rejestr_gruntow  (kod_dzialki, powierzchnia_dzialki, numer_KW, numer_arkusza_mapy, kod_obrebu_ewidencyjnego) VALUES('030711_1.0011.222', 1.0092, 'KW/14ab/18/03', 'AC-CD-52-156', '030711_1.0011');
+INSERT INTO rejestr_gruntow  (kod_dzialki, powierzchnia_dzialki, numer_KW, numer_arkusza_mapy, kod_obrebu_ewidencyjnego) VALUES('030711_1.0011.163', 0.1102, 'KW/14ab/20/07', 'AC-CD-52-156', '030711_1.0011');
 
 
-INSERT INTO rejestr_wlascicieli (PESEL, imie, nazwisko, adres) VALUES
-('87062300576','Damian','Krzychowski','Bieszkowice, ul. Białostocka 1'),
-('64070321557','Emil','Pawlak','Wałcz,  ul. Grabowa 2'),
-('83112987903','Józef','Bramowicz','Mirosławiec, ul. Szkolna 2'),
-('76101621907','Krystian','Nowak','Gdańsk ul. Jesionowa 1'),
-('78111121207','Janina','Nowak','Gdańsk ul. Jesionowa 1');
+INSERT INTO ewidencja_podatkowa  (kod_gminy, podatek_od_gruntu, podatek_od_budynku, wskaznik_biologiczny) VALUES('041201_2', 0.56, 1.36, 0.5);
+INSERT INTO ewidencja_podatkowa  (kod_gminy, podatek_od_gruntu, podatek_od_budynku, wskaznik_biologiczny) VALUES('030711_1', 0.96, 1.95, 0.4);
+
+INSERT INTO rejestr_budynkow (kod_budynku, kod_dzialki, powierzchnia_budynku, przeznaczenie_budynku) VALUES('041201_2.0001.26/2.1', '041201_2.0001.26/2', 0.0120, 'B');
+INSERT INTO rejestr_budynkow (kod_budynku, kod_dzialki, powierzchnia_budynku, przeznaczenie_budynku) VALUES('041201_2.0001.26/1.1', '041201_2.0001.26/1', 0.0110, 'B');
+INSERT INTO rejestr_budynkow (kod_budynku, kod_dzialki, powierzchnia_budynku, przeznaczenie_budynku) VALUES('041201_2.0001.26/1.2', '041201_2.0001.26/1', 0.0210, 'H');
+INSERT INTO rejestr_budynkow (kod_budynku, kod_dzialki, powierzchnia_budynku, przeznaczenie_budynku) VALUES('041201_2.0001.128.1', '041201_2.0001.128', 0.0240, 'G');
+INSERT INTO rejestr_budynkow (kod_budynku, kod_dzialki, powierzchnia_budynku, przeznaczenie_budynku) VALUES('041201_2.0001.128.2', '041201_2.0001.128', 0.0170, 'B');
+INSERT INTO rejestr_budynkow (kod_budynku, kod_dzialki, powierzchnia_budynku, przeznaczenie_budynku) VALUES('041201_2.0001.128.3', '041201_2.0001.128', 0.0140, 'U');
+INSERT INTO rejestr_budynkow (kod_budynku, kod_dzialki, powierzchnia_budynku, przeznaczenie_budynku) VALUES('041201_2.0001.128.4', '041201_2.0001.128', 0.0144, 'G');
 
 
-INSERT INTO rejestr_wlasnosci (numer_KW, PESEL) VALUES
-('KW/15as/21/12', '87062300576'),
-('KW/15ab/22/03', '87062300576'),
-('KW/12ab/18/03', '64070321557'),
-('KW/12ab/20/07', '64070321557'),
-('KW/14as/21/12', '83112987903'),
-('KW/14ab/22/03', '76101621907'),
-('KW/14ab/18/03', '76101621907'),
-('KW/14ab/22/03', '78111121207'),
-('KW/14ab/18/03', '78111121207'),
-('KW/14ab/20/07', '76101621907');
+INSERT INTO rejestr_wlascicieli (PESEL, imie, nazwisko, adres) VALUES ('87062300576','Damian','Krzychowski','Bieszkowice, ul. Białostocka 1');
+INSERT INTO rejestr_wlascicieli (PESEL, imie, nazwisko, adres) VALUES ('64070321557','Emil','Pawlak','Wałcz,  ul. Grabowa 2');
+INSERT INTO rejestr_wlascicieli (PESEL, imie, nazwisko, adres) VALUES ('83112987903','Józef','Bramowicz','Mirosławiec, ul. Szkolna 2');
+INSERT INTO rejestr_wlascicieli (PESEL, imie, nazwisko, adres) VALUES ('76101621907','Krystian','Nowak','Gdańsk ul. Jesionowa 1');
+INSERT INTO rejestr_wlascicieli (PESEL, imie, nazwisko, adres) VALUES ('78111121207','Janina','Nowak','Gdańsk ul. Jesionowa 1');
+
+
+INSERT INTO rejestr_wlasnosci (numer_KW, PESEL) VALUES ('KW/15as/21/12', '87062300576');
+INSERT INTO rejestr_wlasnosci (numer_KW, PESEL) VALUES ('KW/15ab/22/03', '87062300576');
+INSERT INTO rejestr_wlasnosci (numer_KW, PESEL) VALUES ('KW/12ab/18/03', '64070321557');
+INSERT INTO rejestr_wlasnosci (numer_KW, PESEL) VALUES ('KW/12ab/20/07', '64070321557');
+INSERT INTO rejestr_wlasnosci (numer_KW, PESEL) VALUES ('KW/14as/21/12', '83112987903');
+INSERT INTO rejestr_wlasnosci (numer_KW, PESEL) VALUES ('KW/14ab/22/03', '76101621907');
+INSERT INTO rejestr_wlasnosci (numer_KW, PESEL) VALUES ('KW/14ab/18/03', '76101621907');
+INSERT INTO rejestr_wlasnosci (numer_KW, PESEL) VALUES ('KW/14ab/22/03', '78111121207');
+INSERT INTO rejestr_wlasnosci (numer_KW, PESEL) VALUES ('KW/14ab/18/03', '78111121207');
+INSERT INTO rejestr_wlasnosci (numer_KW, PESEL) VALUES ('KW/14ab/20/07', '76101621907');
+
+
+--procedury
+--dodaj wlasciciela
+DROP PROCEDURE dodaj_wlasciciela; 
+
+CREATE PROCEDURE dodaj_wlasciciela(
+	IN PESEL VARCHAR(13), 
+	IN imie VARCHAR(30), 
+	IN nazwisko VARCHAR(30), 
+	IN adres VARCHAR(80)
+)
+BEGIN
+	-- exit if the duplicate key occurs
+	DECLARE EXIT HANDLER FOR 1062
+	BEGIN
+		SELECT CONCAT('Istnieje już osoba o takim numerze PESEL');
+	END;
+	-- insert a new row into the table
+    INSERT INTO rejestr_wlascicieli  VALUES(PESEL, imie, nazwisko, adres);
+    SELECT CONCAT('Dodano: ', imie, ' ', nazwisko, ' do bazy');
+END;
+
+CALL dodaj_wlasciciela('99020424252', 'Alicja', 'Kiedrowska', 'Gaj 5, 24-254 Gaj');
+
+--usun wlasciciela
+
+DROP PROCEDURE usun_wlasciciela; 
+
+CREATE PROCEDURE usun_wlasciciela(
+	IN v_PESEL VARCHAR(13)
+)
+BEGIN
+	DELETE FROM rejestr_wlascicieli WHERE PESEL = v_PESEL;
+	SELECT CONCAT('Usunieto wlasciciela o numerze PESEL: ', v_PESEL);
+END;
+
+CALL usun_wlasciciela('99020424252')
+
+--zmodyfikuj dzialke
+
+
+
+
+
