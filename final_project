@@ -1,90 +1,137 @@
-CREATE DATABASE `cadastre`
+CREATE TABLE wojewodztwa (
+  kod_wojewodztwa varchar(2) NOT NULL,
+  nazwa_wojewodztwa varchar(50) NOT NULL,
+  PRIMARY KEY (kod_wojewodztwa)
+);
 
-CREATE TABLE `wojewodztwa` (
-  `kod_wojewodztwa` varchar(2) NOT NULL,
-  `nazwa_wojewodztwa` varchar(50) NOT NULL,
-  PRIMARY KEY (`kod_wojewodztwa`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE powiaty (
+  kod_powiatu varchar(4) NOT NULL,
+  kod_wojewodztwa varchar(2) NOT NULL,
+  nazwa_powiatu varchar(50) NOT NULL,
+  PRIMARY KEY (kod_powiatu),
+  KEY kod_wojewodztwa (kod_wojewodztwa),
+);
 
-CREATE TABLE `powiaty` (
-  `kod_powiatu` varchar(4) NOT NULL,
-  `kod_wojewodztwa` varchar(2) NOT NULL,
-  `nazwa_powiatu` varchar(50) NOT NULL,
-  PRIMARY KEY (`kod_powiatu`),
-  KEY `kod_wojewodztwa` (`kod_wojewodztwa`),
-  CONSTRAINT `powiaty_ibfk_1` FOREIGN KEY (`kod_wojewodztwa`) REFERENCES `wojewodztwa` (`kod_wojewodztwa`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE gminy (
+  kod_gminy varchar(8) NOT NULL,
+  kod_powiatu varchar(4) NOT NULL,
+  nazwa_gminy varchar(80) NOT NULL,
+  PRIMARY KEY (kod_gminy),
+  FOREIGN KEY (kod_powiatu) REFERENCES powiaty(kod_powiatu)
+  );
+  
+ CREATE TABLE obreby_ewidencyjne (
+  kod_obrebu_ewidencyjnego varchar(13) NOT NULL,
+  kod_gminy varchar(8) NOT NULL,
+  PRIMARY KEY (kod_obrebu_ewidencyjnego),
+  FOREIGN KEY (kod_gminy) REFERENCES gminy(kod_gminy)
+);
 
-CREATE TABLE `gminy` (
-  `kod_gminy` varchar(8) NOT NULL,
-  `kod_powiatu` varchar(4) NOT NULL,
-  `nazwa_gminy` varchar(80) NOT NULL,
-  PRIMARY KEY (`kod_gminy`),
-  KEY `kod_powiatu` (`kod_powiatu`),
-  CONSTRAINT `gminy_ibfk_1` FOREIGN KEY (`kod_powiatu`) REFERENCES `powiaty` (`kod_powiatu`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE rejestr_gruntow(
+  kod_dzialki varchar(24) NOT NULL,
+  powierzchnia_dzialki decimal(10,0) NOT NULL,
+  numer_KW varchar(16) NOT NULL,
+  numer_arkusza_mapy varchar(12) NOT NULL,
+  kod_obrebu_ewidencyjnego varchar(13) NOT NULL,
+  PRIMARY KEY (kod_dzialki),
+  FOREIGN KEY (kod_obrebu_ewidencyjnego) REFERENCES obreby_ewidencyjne(kod_obrebu_ewidencyjnego)
+ );
+ 
+CREATE TABLE rejestr_KW (
+  numer_KW varchar(16) NOT NULL,
+  data_wpisu date NOT NULL,
+  PRIMARY KEY (numer_KW)
+);
 
-CREATE TABLE `obreby_ewidencyjne` (
-  `kod_obrebu_ewidencyjnego` varchar(13) NOT NULL,
-  `kod_gminy` varchar(8) NOT NULL,
-  PRIMARY KEY (`kod_obrebu_ewidencyjnego`),
-  KEY `kod_gminy` (`kod_gminy`),
-  CONSTRAINT `obreby_ewidencyjne_ibfk_1` FOREIGN KEY (`kod_gminy`) REFERENCES `gminy` (`kod_gminy`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE rejestr_budynkow (
+  kod_budynku varchar(24) NOT NULL,
+  kod_dzialki varchar(24) NOT NULL,
+  powierzchnia_budynku decimal(10,0) NOT NULL,
+  PRIMARY KEY (kod_budynku)
+);
 
-CREATE TABLE `rejestr_gruntow` (
-  `kod_dzialki` varchar(24) NOT NULL,
-  `powierzchnia_dzialki` decimal(10,0) NOT NULL,
-  `numer_KW` varchar(16) NOT NULL,
-  `numer_arkusza_mapy` varchar(12) NOT NULL,
-  `kod_obrebu_ewidencyjnego` varchar(13) DEFAULT NULL,
-  PRIMARY KEY (`kod_dzialki`),
-  KEY `numer_KW` (`numer_KW`),
-  KEY `kod_obrebu_ewidencyjnego` (`kod_obrebu_ewidencyjnego`),
-  CONSTRAINT `rejestr_gruntow_ibfk_1` FOREIGN KEY (`numer_KW`) REFERENCES `rejestr_KW` (`numer_KW`),
-  CONSTRAINT `rejestr_gruntow_ibfk_2` FOREIGN KEY (`kod_obrebu_ewidencyjnego`) REFERENCES `obreby_ewidencyjne` (`kod_obrebu_ewidencyjnego`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE rejestr_wlascicieli (
+  PESEL int NOT NULL,
+  imie varchar(30) NOT NULL,
+  nazwisko varchar(30) NOT NULL,
+  adres varchar(80) NOT NULL,
+  PRIMARY KEY (PESEL)
+);
 
-CREATE TABLE `rejestr_KW` (
-  `numer_KW` varchar(16) NOT NULL,
-  `data_wpisu` date NOT NULL,
-  PRIMARY KEY (`numer_KW`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE rejestr_wlasnosci (
+  numer_KW varchar(16) NOT NULL,
+  PESEL int NOT NULL,
+  FOREIGN KEY (PESEL) REFERENCES rejestr_wlascicieli(PESEL),
+  FOREIGN KEY (numer_KW) REFERENCES rejestr_KW(numer_KW)
+)
 
-CREATE TABLE `rejestr_budynkow` (
-  `kod_budynku` varchar(24) NOT NULL,
-  `kod_dzialki` varchar(24) NOT NULL,
-  `powierzchnia_budynku` decimal(10,0) NOT NULL,
-  PRIMARY KEY (`kod_budynku`),
-  KEY `kod_dzialki` (`kod_dzialki`),
-  CONSTRAINT `rejestr_budynkow_ibfk_1` FOREIGN KEY (`kod_dzialki`) REFERENCES `rejestr_gruntow` (`kod_dzialki`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE ewidencja_podatkowa (
+  kod_gminy varchar(8) NOT NULL,
+  podatek_od_gruntu decimal(10,0) NOT NULL,
+  podatek_od_budynku decimal(10,0) NOT NULL,
+  wskaznik_biologiczny decimal(10,0) NOT NULL,
+  PRIMARY KEY (kod_gminy),
+  FOREIGN KEY (kod_gminy) REFERENCES gminy(kod_gminy)
+)
 
-CREATE TABLE `rejestr_wlascicieli` (
-  `PESEL` int NOT NULL,
-  `imie` varchar(30) NOT NULL,
-  `nazwisko` varchar(30) NOT NULL,
-  `adres` varchar(80) NOT NULL,
-  PRIMARY KEY (`PESEL`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+ALTER TABLE rejestr_gruntow  
+ADD(FOREIGN KEY (numer_KW) REFERENCES rejestr_KW(numer_KW));
 
-CREATE TABLE `rejestr_wlasnosci` (
-  `numer_KW` varchar(16) NOT NULL,
-  `PESEL` int NOT NULL,
-  KEY `numer_KW` (`numer_KW`),
-  KEY `PESEL` (`PESEL`),
-  CONSTRAINT `rejestr_wlasnosci_ibfk_1` FOREIGN KEY (`numer_KW`) REFERENCES `rejestr_KW` (`numer_KW`),
-  CONSTRAINT `rejestr_wlasnosci_ibfk_2` FOREIGN KEY (`PESEL`) REFERENCES `rejestr_wlascicieli` (`PESEL`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+ALTER TABLE rejestr_budynkow  
+ADD(FOREIGN KEY (kod_dzialki) REFERENCES rejestr_gruntow(kod_dzialki));
 
-CREATE TABLE `ewidencja_podatkowa` (
-  `kod_gminy` varchar(8) NOT NULL,
-  `podatek_od_gruntu` decimal(10,0) NOT NULL,
-  `podatek_od_budynku` decimal(10,0) NOT NULL,
-  `wskaznik_biologiczny` decimal(10,0) NOT NULL,
-  PRIMARY KEY (`kod_gminy`),
-  CONSTRAINT `ewidencja_podatkowa_ibfk_1` FOREIGN KEY (`kod_gminy`) REFERENCES `gminy` (`kod_gminy`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+ALTER TABLE rejestr_budynkow  
+ADD(przeznaczenie_budynku VARCHAR(3) NOT NULL);
 
 ALTER TABLE rejestr_wlasnosci 
-ADD(PRIMARY KEY (numer_KW, PESEL))
+ADD(PRIMARY KEY (numer_KW, PESEL));
+
+INSERT INTO wojewodztwa (kod_wojewodztwa, nazwa_wojewodztwa) VALUES
+('01', 'podlaskie'),
+('02', 'warminsko-mazurskie'),
+('03', 'mazowieckie');
+
+INSERT INTO powiaty (kod_powiatu, kod_wojewodztwa, nazwa_powiatu) VALUES
+('0104', '01', 'kolnenski'),
+('0202', '02', 'm.Olsztyn'),
+('0307', '03', 'ostrolecki'),
+('0109', '01', 'monski'),
+('0203', '02', 'elcki'),
+('0301', '03', 'makowski');
+
+INSERT INTO gminy (kod_gminy, kod_powiatu, nazwa_gminy) VALUES
+('041201_2', '0104', 'Turosl'),
+('020201_1', '0202', 'm.Olsztyn'),
+('010405_1', '0104', 'Kolno'),
+('010407_2', '0104', 'Maly Plock'),
+('030711_1', '0307', 'Myszyniec'),
+('030722_1', '0307', 'Lyse');
+
+INSERT INTO obreby_ewidencyjne  (kod_obrebu_ewidencyjnego, kod_gminy) VALUES
+('041201_2.0001', '041201_2'),
+('041201_2.0002', '041201_2'),
+('041201_2.0003', '041201_2'),
+('030711_1.0011', '030711_1'),
+('030711_1.0012', '030711_1'),
+('030711_1.0013', '030711_1');
+
+
+INSERT INTO rejestr_KW (numer_KW, data_wpisu) VALUES
+('KW/15as/21/12', '2021-12-11'),
+('KW/15ab/22/03', '2022-03-11'),
+('KW/12ab/18/03', '2018-03-11'),
+('KW/12ab/20/07', '2020-07-11'),
+('KW/14as/21/12', '2021-12-11'),
+('KW/14ab/22/03', '2022-03-11'),
+('KW/14ab/18/03', '2018-03-11'),
+('KW/14ab/20/07', '2020-07-11');
+
+INSERT INTO rejestr_gruntow  (kod_dzialki, powierzchnia_dzialki, numer_KW, numer_arkusza_mapy, kod_obrebu_ewidencyjnego) VALUES
+('041201_2.0001.26/2', 0.2222, 'KW/15as/21/12', 'AC-GD-52-256', '041201_2.0001'),
+('041201_2.0001.26/1', 0.3822, 'KW/15ab/22/03', 'AC-GD-52-256', '041201_2.0001'),
+('041201_2.0001.25', 1.3252, 'KW/12ab/18/03', 'AC-GD-52-156', '041201_2.0001'),
+('041201_2.0001.128', 0.1502, 'KW/12ab/20/07', 'AC-GD-52-156', '041201_2.0001'),
+('030711_1.0011.29/2', 0.2112, 'KW/14as/21/12', 'AC-GD-52-256', '030711_1.0011'),
+('030711_1.0011.29/1', 0.7423, 'KW/14ab/22/03', 'AC-GD-52-256', '030711_1.0011'),
+('030711_1.0011.222', 1.0092, 'KW/14ab/18/03', 'AC-CD-52-156', '030711_1.0011'),
+('030711_1.0011.163', 0.1102, 'KW/14ab/20/07', 'AC-CD-52-156', '030711_1.0011');
