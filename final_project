@@ -206,6 +206,8 @@ BEGIN
 	DBMS_OUTPUT.put_line(znajdz_numer_KW('041201_2.0001.26/2'));
 END;
 
+--procedury
+--zmien wlasciciela dzialki
 
 CREATE OR REPLACE Procedure zmien_wlasciciela (v_kod_dzialki IN varchar2, v_PESEL IN varchar2) IS
 v_numer_KW2 VARCHAR(24);
