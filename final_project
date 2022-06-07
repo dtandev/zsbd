@@ -213,14 +213,14 @@ brak_ksiegi EXCEPTION;
 
 BEGIN
 	v_numer_KW2:=ZNAJDZ_NUMER_KW(v_kod_dzialki);
-	IF v_numer_KW2 LIKE '' THEN RAISE brak_ksiegi;
-	ELSE
 	UPDATE REJESTR_WLASNOSCI
         SET PESEL = v_PESEL
         WHERE NUMER_KW  = v_numer_KW2;
+    IF SQL%NOTFOUND THEN RAISE brak_ksiegi;
+    ELSE
  	DBMS_OUTPUT.PUT_LINE('Nowy wlasciciel zostal przypisany');
  	END IF;
-EXCEPTION
+	EXCEPTION
     WHEN brak_ksiegi THEN
     DBMS_OUTPUT.put_line('Dla podanego numeru działki nie istnieje księga wieczysta.');
 END zmien_wlasciciela;
@@ -229,3 +229,4 @@ END zmien_wlasciciela;
 BEGIN
 	zmien_wlasciciela('041201_2.0001.26/2afafas', '98010112345');
 END;
+
