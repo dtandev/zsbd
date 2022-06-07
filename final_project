@@ -178,6 +178,32 @@ BEGIN
 END;
 
 
+CREATE OR REPLACE FUNCTION znajdz_numer_KW 
+	(v_kod_dzialki IN VARCHAR2) 
+	RETURN VARCHAR2 IS 
+v_numer_KW VARCHAR(24);
 
+	cursor c1 is
+	SELECT numer_KW
+		FROM REJESTR_GRUNTOW rg
+		WHERE KOD_DZIALKI = v_kod_dzialki;
+
+BEGIN
+	OPEN c1;
+	FETCH c1 INTO v_numer_KW;
+	IF c1%notfound THEN 
+		v_numer_KW:='';
+	END IF;
+	return v_numer_KW;
+EXCEPTION
+WHEN OTHERS THEN
+   raise_application_error(-20001,'An error was encountered - '||SQLCODE||' -ERROR- '||SQLERRM);
+END znajdz_numer_KW;
+
+
+
+BEGIN
+	DBMS_OUTPUT.put_line(znajdz_numer_KW('041201_2.0001.26/2'));
+END;
 
 
