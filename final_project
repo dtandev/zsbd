@@ -232,3 +232,40 @@ BEGIN
 	zmien_wlasciciela('041201_2.0001.26/2afafas', '98010112345');
 END;
 
+-- Do poprawy
+
+
+CREATE OR REPLACE FUNCTION czy_mozliwy_podzial 
+	(v_kod_dzialki IN VARCHAR2, nowa_powierzchnia_dzialki IN NUMBER) 
+	RETURN NUMBER IS 
+ powierzchnia_wybranej_dzialki NUMBER(10,4);
+ czy_podzielic NUMBER(1);
+ brak_dzialki EXCEPTION;--1 > YES
+
+	cursor c1 is
+	SELECT POWIERZCHNIA_DZIALKI  
+		FROM REJESTR_GRUNTOW rg
+		WHERE KOD_DZIALKI = v_kod_dzialki;
+
+BEGIN
+	OPEN c1;
+	FETCH c1 INTO powierzchnia_wybranej_dzialki;
+	IF SQL%NOTFOUND THEN RAISE brak_dzialki;
+	ELSE
+		IF powierzchnia_wybrane_dzialki < nowa_powierzchnia_dzialki + 0.0300 THEN
+			RETURN 1;
+		ELSE RETURN 0;
+		END IF;
+	END IF;
+EXCEPTION
+WHEN brak_dzialki THEN
+    DBMS_OUTPUT.put_line('Nie istnieje działka o wybranym numerze');
+   	RETURN 0
+WHEN OTHERS THEN
+   raise_application_error(-20001,'An error was encountered - '||SQLCODE||' -ERROR- '||SQLERRM);
+END czy_mozliwy_podzial;
+
+
+BEGIN
+	czy_mozliwy_podzial('041201_2.0001.26/2', 0.2000);
+END;
