@@ -324,3 +324,21 @@ END znajdz_kod_gminy;
 BEGIN
 	 DBMS_OUTPUT.put_line(znajdz_kod_gminy('Turosl'));
 END;
+
+-- funkcja obliczająca podatek
+
+CREATE OR REPLACE FUNCTION oblicz_podatek 
+	(v_powierzchnia_nieruchomosci IN NUMBER, v_stawka_podatku IN NUMBER) 
+	RETURN NUMBER IS
+wartosc_podatku NUMBER(5,2);
+
+BEGIN
+	wartosc_podatku:= v_powierzchnia_nieruchomosci*10000*v_stawka_podatku;
+	RETURN wartosc_podatku;
+END oblicz_podatek;
+
+BEGIN
+	 DBMS_OUTPUT.put_line(oblicz_podatek(0.222, 0.19));
+END;
+
+--
