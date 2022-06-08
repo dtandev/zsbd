@@ -352,25 +352,29 @@ v_kod_gminy VARCHAR(8);
 		WHERE KOD_GMINY  = znajdz_kod_gminy(v_nazwa_gminy);
 	
 	cursor c2(v_podatek_od_gruntu NUMBER) is
-	SELECT KOD_DZIALKI, POWIERZCHNIA_DZIALKI, oblicz_podatek(POWIERZCHNIA_DZIALKI, v_podatek_od_gruntu) AS "PODATEK"
+	SELECT KOD_DZIALKI, POWIERZCHNIA_DZIALKI, oblicz_podatek(POWIERZCHNIA_DZIALKI, 0.19) AS "PODATEK"
 		FROM REJESTR_GRUNTOW rg 
-		WHERE KOD_DZIALKI LIKE ('%'||znajdz_kod_gminy(v_nazwa_gminy)||'%')
+		WHERE KOD_DZIALKI LIKE ('%'||znajdz_kod_gminy(v_nazwa_gminy)||'%');
 	wiersz_z_wynikami c2%ROWTYPE;
 
 BEGIN
 	 v_kod_gminy:=znajdz_kod_gminy(v_nazwa_gminy);
      DBMS_OUTPUT.put_line(v_kod_gminy);
     OPEN c1;
-    
 	FETCH c1 INTO v_podatek_od_gruntu;
 	DBMS_OUTPUT.put_line(v_podatek_od_gruntu);
 	IF c1%notfound THEN 
 		v_podatek_od_gruntu:= 0.0;
 	ELSE
 		DBMS_OUTPUT.put_line('Wydruk kontrolny: ELSE');
-		--OPEN c2(v_podatek_od_gruntu);
-		--FETCH c2 INTO wiersz_z_wynikami;
-		--CLOSE c2;
+		OPEN c2(v_podatek_od_gruntu);
+		LOOP
+			FETCH c2 INTO wiersz_z_wynikami;
+			EXIT WHEN c2%NOTFOUND;
+			DBMS_OUTPUT.put_line('Dla dzialki '||wiersz_z_wynikami.KOD_DZIALKI||' podatek wyniesie '||wiersz_z_wynikami.PODATEK);
+			loguj_zdarzenie('Obliczono podatek dla dzialki '||wiersz_z_wynikami.KOD_DZIALKI);
+		END LOOP;
+		CLOSE c2;
 	END IF;
 	CLOSE c1;
 EXCEPTION
