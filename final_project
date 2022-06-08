@@ -341,4 +341,32 @@ BEGIN
 	 DBMS_OUTPUT.put_line(oblicz_podatek(0.222, 0.19));
 END;
 
---
+-- obliczanie podatku
+CREATE OR REPLACE Procedure wyslij_noty_podatkowe (v_nazwa_gminy IN VARCHAR2 DEFAULT 'Turosl') IS
+v_podatek_od_gruntu NUMBER(5,2);
+v_kod_gminy VARCHAR(8);
+
+	cursor c1 is
+	SELECT PODATEK_OD_GRUNTU
+		FROM EWIDENCJA_PODATKOWA ep 
+		WHERE KOD_GMINY  = znajdz_kod_gminy(v_nazwa_gminy);
+
+BEGIN
+	 v_kod_gminy:=znajdz_kod_gminy(v_nazwa_gminy);
+     DBMS_OUTPUT.put_line(v_kod_gminy);
+    OPEN c1;
+	FETCH c1 INTO v_podatek_od_gruntu;
+	IF c1%notfound THEN 
+		v_podatek_od_gruntu:= 0.0;
+	ELSE
+		DBMS_OUTPUT.put_line('ELSE');
+		SELECT oblicz_podatek(POWIERZCHNIA_DZIALKI, v_podatek_od_gruntu) AS "podatek" FROM REJESTR_GRUNTOW rg;
+	END IF;
+EXCEPTION
+WHEN OTHERS THEN
+	DBMS_OUTPUT.put_line('Something wrong during the data adding process');
+END wyslij_noty_podatkowe;
+
+BEGIN
+	 wyslij_noty_podatkowe('Turosl');
+END;
