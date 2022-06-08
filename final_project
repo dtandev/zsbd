@@ -239,7 +239,6 @@ END;
 
 -- Funkcja sprawdzająca czy mozna wykonać podział działki (żadna z części nie powinna być mniejsza niż 0.0300ha)
 
-
 CREATE OR REPLACE FUNCTION czy_mozliwy_podzial 
 	(nowa_powierzchnia_dzialki IN NUMBER, numer_dzielonej_dzialki IN VARCHAR2) 
 	RETURN NUMBER IS
@@ -277,4 +276,51 @@ BEGIN
 	 DBMS_OUTPUT.put_line(czy_mozliwy_podzial(0.1000, '041201_2.0001.26/2fsgas'));
 END;
 
+-- logowanie komunikatow
 
+CREATE OR REPLACE Procedure loguj_zdarzenie (komunikat IN varchar2) IS
+BEGIN
+     INSERT INTO komunikaty VALUES (komunikat, sysdate);
+     DBMS_OUTPUT.put_line('Zapisano komunikat');
+EXCEPTION
+WHEN OTHERS THEN
+DBMS_OUTPUT.put_line('Something wrong during the data adding process');
+END loguj_zdarzenie;
+
+BEGIN
+	 loguj_zdarzenie('Hello, World!');
+END;
+
+
+-- znajdz kod gminy o podanej nazwie i zaloguj zdarzenia
+
+CREATE OR REPLACE FUNCTION znajdz_kod_gminy 
+	(v_nazwa_gminy IN VARCHAR2) 
+	RETURN VARCHAR2 IS 
+v_kod_gminy VARCHAR(8);
+
+	cursor c1 is
+	SELECT KOD_GMINY
+		FROM GMINY g
+		WHERE NAZWA_GMINY  = v_nazwa_gminy;
+
+BEGIN
+	OPEN c1;
+	FETCH c1 INTO v_kod_gminy;
+	IF c1%notfound THEN 
+		v_kod_gminy:='';
+		DBMS_OUTPUT.put_line('Nie istnieje gmina o podanej nazwie.');
+		loguj_zdarzenie('Szukano i nie znaleziono kodu gminy o nazwie '||v_nazwa_gminy);
+	ELSE
+		DBMS_OUTPUT.put_line('Kod gminy '||v_nazwa_gminy||' to '||v_kod_gminy);
+		loguj_zdarzenie('Szukano i znaleziono kod gminy '||v_nazwa_gminy);
+	END IF;
+	return v_kod_gminy;
+EXCEPTION
+WHEN OTHERS THEN
+   raise_application_error(-20001,'An error was encountered - '||SQLCODE||' -ERROR- '||SQLERRM);
+END znajdz_kod_gminy;
+
+BEGIN
+	 DBMS_OUTPUT.put_line(znajdz_kod_gminy('Turosl'));
+END;
