@@ -325,22 +325,6 @@ BEGIN
 	 DBMS_OUTPUT.put_line(znajdz_kod_gminy('Turosl'));
 END;
 
--- funkcja obliczająca podatek
-
-CREATE OR REPLACE FUNCTION oblicz_podatek 
-	(v_powierzchnia_nieruchomosci IN NUMBER, v_stawka_podatku IN NUMBER) 
-	RETURN NUMBER IS
-wartosc_podatku NUMBER(5,2);
-
-BEGIN
-	wartosc_podatku:= v_powierzchnia_nieruchomosci*10000*v_stawka_podatku;
-	RETURN wartosc_podatku;
-END oblicz_podatek;
-
-BEGIN
-	 DBMS_OUTPUT.put_line(oblicz_podatek(0.222, 0.19));
-END;
-
 -- obliczanie podatku
 CREATE OR REPLACE Procedure wyslij_noty_podatkowe (v_nazwa_gminy IN VARCHAR2 DEFAULT 'Turosl') IS
 v_podatek_od_gruntu NUMBER(5,2);
@@ -352,10 +336,10 @@ v_kod_gminy VARCHAR(8);
 		WHERE KOD_GMINY  = znajdz_kod_gminy(v_nazwa_gminy);
 	
 	cursor c2(v_podatek_od_gruntu NUMBER) is
-	SELECT rg.KOD_DZIALKI, rg.POWIERZCHNIA_DZIALKI, oblicz_podatek(rg.POWIERZCHNIA_DZIALKI, v_podatek_od_gruntu) AS "PODATEK", rg.NUMER_KW--, rw.NUMER_KW, rw.PESEL, ro.ADRES, ro.PESEL 
+	SELECT rg.KOD_DZIALKI, rg.POWIERZCHNIA_DZIALKI, oblicz_podatek(rg.POWIERZCHNIA_DZIALKI, v_podatek_od_gruntu) AS "PODATEK"--, ro.ADRES
 		FROM REJESTR_GRUNTOW rg 
-		--JOIN REJESTR_WLASNOSCI rw ON rg.NUMER_KW = rw.NUMER_KW
-		--JOIN REJESTR_WLASCICIELI ro ON rw.PESEL = ro.PESEL
+		JOIN REJESTR_WLASNOSCI rw ON rg.NUMER_KW = rw.NUMER_KW
+		JOIN REJESTR_WLASCICIELI ro ON rw.PESEL = ro.PESEL
 		WHERE rg.KOD_DZIALKI LIKE ('%'||znajdz_kod_gminy(v_nazwa_gminy)||'%');
 	wiersz_z_wynikami c2%ROWTYPE;
 
