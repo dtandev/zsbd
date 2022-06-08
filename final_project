@@ -74,6 +74,11 @@ CREATE TABLE ewidencja_podatkowa (
   FOREIGN KEY (kod_gminy) REFERENCES gminy(kod_gminy)
 )
 
+CREATE TABLE komunikaty (
+  tresc_komunikatu varchar(255) NOT NULL,
+  data_komunikatu DATE NOT NULL
+);
+
 ALTER TABLE rejestr_gruntow  
 ADD(FOREIGN KEY (numer_KW) REFERENCES rejestr_KW(numer_KW));
 
@@ -232,40 +237,44 @@ BEGIN
 	zmien_wlasciciela('041201_2.0001.26/2afafas', '98010112345');
 END;
 
--- Do poprawy
+-- Funkcja sprawdzająca czy mozna wykonać podział działki (żadna z części nie powinna być mniejsza niż 0.0300ha)
 
 
 CREATE OR REPLACE FUNCTION czy_mozliwy_podzial 
-	(v_kod_dzialki IN VARCHAR2, nowa_powierzchnia_dzialki IN NUMBER) 
-	RETURN NUMBER IS 
- powierzchnia_wybranej_dzialki NUMBER(10,4);
- czy_podzielic NUMBER(1);
- brak_dzialki EXCEPTION;--1 > YES
+	(nowa_powierzchnia_dzialki IN NUMBER, numer_dzielonej_dzialki IN VARCHAR2) 
+	RETURN NUMBER IS
+powierzchnia_wybranej_dzialki NUMBER(10,4);
+brak_dzialki EXCEPTION;
 
 	cursor c1 is
 	SELECT POWIERZCHNIA_DZIALKI  
 		FROM REJESTR_GRUNTOW rg
-		WHERE KOD_DZIALKI = v_kod_dzialki;
+		WHERE KOD_DZIALKI = numer_dzielonej_dzialki;
 
 BEGIN
 	OPEN c1;
 	FETCH c1 INTO powierzchnia_wybranej_dzialki;
 	IF SQL%NOTFOUND THEN RAISE brak_dzialki;
 	ELSE
-		IF powierzchnia_wybrane_dzialki < nowa_powierzchnia_dzialki + 0.0300 THEN
-			RETURN 1;
-		ELSE RETURN 0;
+		DBMS_OUTPUT.put_line('Powierzchnia dzielonej dzialki: '||powierzchnia_wybranej_dzialki);
+		IF 0.222 > (nowa_powierzchnia_dzialki + 0.0300) THEN RETURN 1;
+		ELSE 
+		DBMS_OUTPUT.put_line('Nie można podzielić działki w taki sposób.');
+		RETURN 0;
 		END IF;
 	END IF;
+	CLOSE c1;
 EXCEPTION
 WHEN brak_dzialki THEN
     DBMS_OUTPUT.put_line('Nie istnieje działka o wybranym numerze');
-   	RETURN 0
+    RETURN 0;
 WHEN OTHERS THEN
    raise_application_error(-20001,'An error was encountered - '||SQLCODE||' -ERROR- '||SQLERRM);
 END czy_mozliwy_podzial;
 
 
 BEGIN
-	czy_mozliwy_podzial('041201_2.0001.26/2', 0.2000);
+	 DBMS_OUTPUT.put_line(czy_mozliwy_podzial(0.1000, '041201_2.0001.26/2fsgas'));
 END;
+
+
