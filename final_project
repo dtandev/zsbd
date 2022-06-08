@@ -79,6 +79,11 @@ CREATE TABLE komunikaty (
   data_komunikatu DATE NOT NULL
 );
 
+CREATE TABLE noty_podatkowe (
+  nota varchar(255) NOT NULL,
+  data_wystawienia DATE NOT NULL
+);
+
 ALTER TABLE rejestr_gruntow  
 ADD(FOREIGN KEY (numer_KW) REFERENCES rejestr_KW(numer_KW));
 
@@ -372,4 +377,20 @@ BEGIN
 	 wyslij_noty_podatkowe('Turosl');
 END;
 
+-- dodawanie not podatkowych do bazy
+
+create or replace PROCEDURE dodaj_note(nota IN VARCHAR2) IS
+BEGIN
+     INSERT INTO noty_podatkowe VALUES (nota, sysdate);
+     DBMS_OUTPUT.put_line('Zapisano note podatkowa');
+     loguj_zdarzenie('Zapisano note podatkowa');
+EXCEPTION
+WHEN OTHERS THEN
+DBMS_OUTPUT.put_line('Dodanie noty podatkowej nie powiodlo sie');
+loguj_zdarzenie('Zapisanie noty podatkowej nie powiodlo sie.');
+END dodaj_note;
+
+BEGIN
+	dodaj_note('Hello World');
+END;
 
