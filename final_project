@@ -352,9 +352,11 @@ v_kod_gminy VARCHAR(8);
 		WHERE KOD_GMINY  = znajdz_kod_gminy(v_nazwa_gminy);
 	
 	cursor c2(v_podatek_od_gruntu NUMBER) is
-	SELECT KOD_DZIALKI, POWIERZCHNIA_DZIALKI, oblicz_podatek(POWIERZCHNIA_DZIALKI, 0.19) AS "PODATEK"
+	SELECT rg.KOD_DZIALKI, rg.POWIERZCHNIA_DZIALKI, oblicz_podatek(rg.POWIERZCHNIA_DZIALKI, v_podatek_od_gruntu) AS "PODATEK", rg.NUMER_KW--, rw.NUMER_KW, rw.PESEL, ro.ADRES, ro.PESEL 
 		FROM REJESTR_GRUNTOW rg 
-		WHERE KOD_DZIALKI LIKE ('%'||znajdz_kod_gminy(v_nazwa_gminy)||'%');
+		--JOIN REJESTR_WLASNOSCI rw ON rg.NUMER_KW = rw.NUMER_KW
+		--JOIN REJESTR_WLASCICIELI ro ON rw.PESEL = ro.PESEL
+		WHERE rg.KOD_DZIALKI LIKE ('%'||znajdz_kod_gminy(v_nazwa_gminy)||'%');
 	wiersz_z_wynikami c2%ROWTYPE;
 
 BEGIN
